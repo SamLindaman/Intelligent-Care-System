@@ -1,0 +1,33 @@
+------------------------------Work plan------------------------------------
+2020/06/29
+
+-Team plan-
+1. Read ppt and doucument files to understanding purpose of this course.
+2. Make a group (Park,Sam,Nabil,Lee,Antonio,Kim)
+3. Elect group leader (Park)
+4. Make a new github project to upload team member's work together 
+      (https://github.com/SamLindaman/Intelligent-Care-System)
+5. Devide work position (Web part: Kim,Lee,Roh,Park / CV part: Nabil,Sam,Antonio,Park)
+
+-Personal plan-
+1.For the web part 
+   - Login (Volunteer, Admin)
+   - Register
+   - Change profile
+   - Function  
+     1) If login with bolunteer ID
+       - Register old people info 
+       - Edit, Search, Delete
+       - Emotion check
+     2) If login with admin ID
+       - Register Worker info
+       - Edit, Search, Delete 
+
+2. Setting development invironment 
+      -Python3.7-  Download complete 
+      -Anaconda3-  Download complete     
+      -Flask-      Download complete     
+      -MySql-      Download complete
+3. Study how it works all together.
+
+----------------------------------------------------------------------------
