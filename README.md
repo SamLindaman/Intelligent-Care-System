@@ -3,8 +3,8 @@ This web application project aims to conduct an intelligent health care system, 
 
 
 # Development Information
-* Pycharm</br>
-* Google Colab</br>
+* IDE : Pycharm</br>
+* Training Tool : Google Colab https://colab.research.google.com/</br>
 ## Web Part
 * Python --3.7</br>
 * Flask --1.1.1</br>
