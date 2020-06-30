@@ -4,7 +4,6 @@ This web application project aims to conduct an intelligent health care system, 
 
 # Development Information
 * Pycharm</br>
-* MySQL</br>
 * Google Colab</br>
 ## Web Part
 * Python --3.7</br>
