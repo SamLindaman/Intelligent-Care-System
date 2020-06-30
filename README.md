@@ -2,7 +2,10 @@
 This web application project aims to conduct an intelligent health care system, which will be able to capture and store the images/videos of target individual, recognize target's identity, and analyze the emotion and behaviors through the captured info.</br>
 
 
-# Development Version
+# Development Information
+* Pycharm</br>
+* MySQL</br>
+* Google Colab</br>
 ## Web Part
 * Python --3.7</br>
 * Flask --1.1.1</br>
