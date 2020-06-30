@@ -3,7 +3,7 @@ This web application project aims to conduct an intelligent health care system, 
 
 
 # Development Information
-* IDE : Pycharm</br>
+* IDE : Pycharm, Spyder</br>
 * Training Tool : Google Colab https://colab.research.google.com/</br>
 ## Web Part
 * Python --3.7</br>
