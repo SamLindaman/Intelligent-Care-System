@@ -5,11 +5,11 @@ from PIL import Image,ImageDraw
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-imgNabil = face_recognition.load_image_file('C:/Users/nabil/OneDrive/Desktop/Two week class/Code/Deep_Learning_Computer_Vision-master/Face Recognition Accuracy/images/Nabil.jpg')
-imgNabil_encoding = face_recognition.face_encodings(imgNabil)
+imgNabil = face_recognition.load_image_file('Nabil.jpg')
+imgNabil_encoding = face_recognition.face_encodings(imgNabil)[0]
 
-imgElon = face_recognition.load_image_file('C:/Users/nabil/OneDrive/Desktop/Two week class/Code/Deep_Learning_Computer_Vision-master/Face Recognition Accuracy/images/Elon.jpg')
-imgElon_encoding = face_recognition.face_encodings(imgElon)
+imgElon = face_recognition.load_image_file('Elon.jpg')
+imgElon_encoding = face_recognition.face_encodings(imgElon)[0]
 
 
 known_face_encodings = [imgNabil_encoding,imgElon_encoding]

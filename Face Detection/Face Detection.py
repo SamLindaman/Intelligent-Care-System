@@ -24,7 +24,7 @@ while True:
     #detect a facec inside the image using the classifier above
     #1.3 is for reducing the resolution of the image so that classifier can detect better. 
     #5 is sensitivity of the classifier 
-    faces = face_cascade.detectMultiScale(gray,1.3,8)
+    faces = face_cascade.detectMultiScale(gray,1.3,3)
     # cordinates for the square outside the face
 
         
