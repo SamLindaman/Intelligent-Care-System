@@ -9,12 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-
-    {% if title %}
-        <title>AI Hospital - {{ title }}</title>
-    {% else %}
-        <title>AI Hospital</title>
-    {% endif %}
+        <title>Administrator Page</title>
 </head>
 <body>
 <header class="site-header">
@@ -26,7 +21,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{{ url_for('admin') }}">Write the Notice</a>
+                    <a class="nav-item nav-link" href="{{ url_for('notice_post') }}">Write the Notice</a>
+                    <a class="nav-item nav-link" href="{{ url_for('worker_manage') }}">Manage the Staff</a>
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
@@ -39,19 +35,21 @@
 </header>
 <main role="main" class="container">
     <div class="row">
-        <div class="col-md-8">
-            <h1>Administrator Only</h1>
-        </div>
-        <div class="col-md-4">
-            <div class="content-section">
-                <h3>Notice</h3>
-                <p class='text-muted'>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Our AI system will be a check 08:00-12:00</li>
-                    <li class="list-group-item list-group-item-light">Last week Wed. Update</li>
-                </ul>
-                </p>
-            </div>
+        <div class="col-md">
+            {% block content %}
+            <h3>Notice Board</h3></br>
+                {% for n_post in notice %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <small class="text-muted">{{ n_post.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ n_post.title }}</a></h2>
+                            <p class="article-content">{{ n_post.content }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% endblock %}
         </div>
     </div>
 </main>

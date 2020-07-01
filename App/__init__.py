@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+import pymysql
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5f4c440a3601b408df6ccf7d'

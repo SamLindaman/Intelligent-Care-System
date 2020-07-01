@@ -7,8 +7,8 @@ from datetime import datetime
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return Worker.query.get(user_id)
+def load_user(worker_id):
+    return Worker.query.get(worker_id)
 
 
 class Worker(db.Model, UserMixin):
@@ -17,8 +17,7 @@ class Worker(db.Model, UserMixin):
     username = db.Column(db.CHAR(20), unique=True, nullable=False)
     email = db.Column(db.CHAR(120), unique=True, nullable=False)
     password = db.Column(db.VARCHAR(100), nullable=False)
-
-    # posts = db.relationship('Care_Post', backref='worker', lazy=True)  # For Post the Notice
+    posts = db.relationship('Care_Post', backref='worker', lazy=True)  # For Post the Notice
 
 
 class Patient(db.Model):
@@ -27,16 +26,18 @@ class Patient(db.Model):
     name = db.Column(db.CHAR(20), unique=True, nullable=False)
     sex = db.Column(db.CHAR(1), unique=False, nullable=True)
     age = db.Column(db.CHAR(1), unique=False, nullable=True)
-
+    date_posted = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
 class Care_Post(db.Model):  # For Care Post
     __tablename__ = 'c_post'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     worker_id = db.Column(db.Integer, db.ForeignKey('worker.id'), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Care_Post('{self.title}', '{self.date_posted}')"
 
 
 class Notice_Post(db.Model):  # For Notice Post
@@ -44,4 +45,4 @@ class Notice_Post(db.Model):  # For Notice Post
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
