@@ -24,9 +24,9 @@ This web application project aims to conduct an intelligent health care system, 
 * Keras -- </b>
 
 ### CheckList
-* Emotion Detection  ✅
-* Facial recognition ✅
-* Face Detection     ✅
+* ✅ Emotion Detection  
+* ✅ Facial recognition 
+* ✅ Face Detection     
 
 ### Todos
 
