@@ -16,4 +16,22 @@ This web application project aims to conduct an intelligent health care system, 
 * Flask-wtf --0.14.3</br>
 * pymysql --0.9.3</br>
 * email-validator --1.1.1</br></br>
-## Computer Vision Part
+## Computer Vision Part [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+* OpenCV -- </br>
+* Matplotlib -- </br>
+* face_recognition -- </b>
+
+
+### Todos
+
+ - Analyzes whether someone has fallen 
+ - Analyzes whether someone breaks into the prohibited area
+ 
+ 
+License
+----
+
+MIT
+
+
+**Free Software, Hell Yeah!**
