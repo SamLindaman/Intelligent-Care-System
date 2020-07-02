@@ -20,6 +20,8 @@ This web application project aims to conduct an intelligent health care system, 
 * OpenCV -- </br>
 * Matplotlib -- </br>
 * face_recognition -- </b>
+* Numpy -- </b>
+* Keras -- </b>
 
 
 ### Todos
