@@ -23,6 +23,10 @@ This web application project aims to conduct an intelligent health care system, 
 * Numpy -- </b>
 * Keras -- </b>
 
+### CheckList
+* Emotion Detection  ✅
+* Facial recognition ✅
+* Face Detection     ✅
 
 ### Todos
 
