@@ -1,6 +1,6 @@
-from flask import render_template, url_for, flash, redirect, request
-from App import app, db, bcrypt
-from App.forms import RegistrationForm, LoginForm, PostForm
+from flask import render_template, url_for, flash, redirect, request, Response, Flask
+from App import app, db, bcrypt, emotion_check
+from App.forms import RegistrationForm, LoginForm, PostForm,PatientForm
 from App.models import Worker, Patient, Care_Post, Notice_Post
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -41,9 +41,8 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/register", methods=['GET','POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
-    notice = Notice_Post.query.all()
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
@@ -54,7 +53,7 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form, notice=notice)
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route("/post/report", methods=['GET', 'POST'])
@@ -71,16 +70,30 @@ def new_post():
     return render_template('create_post.html', title='New Post', form=form, notice=notice, legend='New Post')
 
 
-@app.route("/emotioncheck")
-def emotioncheck():
-    notice = Notice_Post.query.all()
-    return render_template('emotioncheck.html', notice=notice, title='Emotion Check')
-
-
-@app.route("/manage/patient")
+@app.route("/manage/patient", methods=['GET', 'POST'])
+@login_required
 def patient_manage():
     notice = Notice_Post.query.all()
-    return render_template('manage_patient.html', notice=notice, title='Patient Management')
+    patient = Patient.query.all()
+    form = PatientForm()
+    if form.validate_on_submit():
+        post = Patient(name=form.name.data, sex=form.sex.data, age=form.age.data)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('patient_manage'))
+    return render_template('manage_patient.html', notice=notice, patient=patient, form=form, title='Patient Management', legend='Register Patient')
+
+
+@app.route("/manage/patient_delete", methods=['GET', 'POST'])
+@login_required
+def patient_delete():
+    id = request.args.get('id')
+    patient = Patient.query.filter_by(id=id).first()
+    db.session.delete(patient)
+    db.session.commit()
+    return redirect(url_for('patient_manage'))
+    return render_template('manage_patient.html', title='Delete Patient List')
 
 
 @app.route("/admin")
@@ -99,7 +112,28 @@ def notice_post():
         return redirect(url_for('admin'))
     return render_template('notice_post.html', form=form, legend='Notice Post')
 
-@app.route("/manage/staff")
+
+@app.route("/manage/staff", methods=['GET', 'POST'])
 def worker_manage():
+    worker = Worker.query.all()
+    return render_template('manage_worker.html', worker=worker)
+
+
+@app.route("/manage/worker_delete", methods=['GET', 'POST'])
+def worker_delete():
+    id = request.args.get('id')
+    worker = Worker.query.filter_by(id=id).first()
+    db.session.delete(worker)
+    db.session.commit()
+    return redirect(url_for('worker_manage'))
+
+
+@app.route("/emotioncheck")
+def emotioncheck():
     notice = Notice_Post.query.all()
-    return render_template('manage_worker.html', notice=notice)
+    return render_template('emotioncheck.html', notice=notice, title='Emotion Check')
+
+
+@app.route('/emotioncheck/video_feed')
+def video_feed():
+    return Response(emotion_check.gen(emotion_check.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')

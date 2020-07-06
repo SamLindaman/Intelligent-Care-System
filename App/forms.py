@@ -37,3 +37,10 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+
+class PatientForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    sex = StringField('Sex', validators=[DataRequired()])
+    age = StringField('Age', validators=[DataRequired()])
+    submit = SubmitField('Post')

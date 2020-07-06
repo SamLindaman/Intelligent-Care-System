@@ -25,8 +25,8 @@ class Patient(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # For @login_manager.user_loader
     name = db.Column(db.CHAR(20), unique=True, nullable=False)
     sex = db.Column(db.CHAR(1), unique=False, nullable=True)
-    age = db.Column(db.CHAR(1), unique=False, nullable=True)
-    date_posted = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    age = db.Column(db.CHAR(2), unique=False, nullable=True)
+
 
 class Care_Post(db.Model):  # For Care Post
     __tablename__ = 'c_post'
