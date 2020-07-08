@@ -3,6 +3,7 @@ This web application project aims to conduct an intelligent health care system, 
 
 
 # Development Information
+* Python --3.7, Pycharm, Spyder</br>
 * Database : MySQL workbench 8.0</br>
 * Training Tool : Google Colab https://colab.research.google.com/</br>
 * Dataset : Kaggle https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data
