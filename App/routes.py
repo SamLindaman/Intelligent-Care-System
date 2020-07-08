@@ -1,8 +1,13 @@
 from flask import render_template, url_for, flash, redirect, request, Response, Flask
-from App import app, db, bcrypt, emotion_check
+from App import app, db, bcrypt
 from App.forms import RegistrationForm, LoginForm, PostForm,PatientForm
 from App.models import Worker, Patient, Care_Post, Notice_Post
 from flask_login import login_user, current_user, logout_user, login_required
+
+from keras.models import load_model
+from keras.preprocessing.image import img_to_array
+import cv2
+import numpy as np
 
 
 @app.route("/")
@@ -101,7 +106,8 @@ def admin():
     notice = Notice_Post.query.all()
     return render_template('admin.html', title='Administrator Only', notice=notice)
 
-@app.route("/post/notice", methods=['GET', 'POST'])
+
+@app.route("/admin/notice/new", methods=['GET', 'POST'])
 def notice_post():
     form = PostForm()
     if form.validate_on_submit():
@@ -111,6 +117,38 @@ def notice_post():
         flash('Your post has been created!', 'success')
         return redirect(url_for('admin'))
     return render_template('notice_post.html', form=form, legend='Notice Post')
+
+
+@app.route("/admin/notice/<int:n_post_id>")
+def n_post(n_post_id):
+    post = Notice_Post.query.get_or_404(n_post_id)
+    return render_template('n_post.html', title=post.title, n_post=post)
+
+
+@app.route("/admin/notice/<int:n_post_id>/update", methods=['GET', 'POST'])
+def update_n_post(n_post_id):
+    post = Notice_Post.query.get_or_404(n_post_id)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your post has been update!', 'success')
+        return redirect(url_for('admin', n_post_id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('notice_post.html', title='Update Notice', form=form, legend='Update Notice')
+
+
+@app.route("/admin/notice/<int:n_post_id>/delete", methods=['POST'])
+def delete_n_post(n_post_id):
+    post = Notice_Post.query.get_or_404(n_post_id)
+    print(post)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been deleted!', 'success')
+    return redirect(url_for('admin'))
 
 
 @app.route("/manage/staff", methods=['GET', 'POST'])
@@ -136,4 +174,38 @@ def emotioncheck():
 
 @app.route('/emotioncheck/video_feed')
 def video_feed():
-    return Response(emotion_check.gen(emotion_check.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+    face_classifier = cv2.CascadeClassifier('/Users/alex/Documents/GitHub/Intelligent-Care-System/App/model/haarcascade_frontalface_default.xml')
+    classifier = load_model('/Users/alex/Documents/GitHub/Intelligent-Care-System/App/model/Emotion_little_vgg_epoch25.h5')
+
+    def gen():
+        cap = cv2.VideoCapture(0)
+        while True:
+            ret, frame = cap.read()
+            gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+            faces = face_classifier.detectMultiScale(gray,1.3,5)
+
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                roi_gray = gray[y:y+h, x:x+w]
+                roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
+                roi = roi_gray.astype('float')/255.0
+                roi = img_to_array(roi)
+                roi = np.expand_dims(roi, axis=0)
+
+                preds = classifier.predict(roi)
+                class_labels = ['Angry', 'Happy', 'Neutral', 'Sad', 'Surprise']
+                label = class_labels[np.argmax(preds[0])]
+                print(label)
+                label_position = (x, y)
+                cv2.putText(frame, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 3)
+                break
+
+            _, jpeg = cv2.imencode('.jpg', frame)
+            yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(jpeg) + b'\r\n\r\n')
+        cap.release()
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
+
+

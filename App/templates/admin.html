@@ -42,9 +42,9 @@
                     <article class="media content-section">
                         <div class="media-body">
                             <div class="article-metadata">
-                                <small class="text-muted">{{ n_post.date_posted }}</small>
+                                <small class="text-muted">{{ n_post.date_posted.strftime('%Y-%m-%d') }}</small>
                             </div>
-                            <h2><a class="article-title" href="#">{{ n_post.title }}</a></h2>
+                            <h2><a class="article-title" style="color: chocolate" href="{{ url_for('n_post', n_post_id=n_post.id) }}">{{ n_post.title }}</a></h2>
                             <p class="article-content">{{ n_post.content }}</p>
                         </div>
                     </article>
