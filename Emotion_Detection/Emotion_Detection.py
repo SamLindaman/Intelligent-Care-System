@@ -1,65 +1,75 @@
 from keras.models import load_model
-from time import sleep
 from keras.preprocessing.image import img_to_array
-from keras.preprocessing import image
 import cv2
 import numpy as np
 
-face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-classifier =load_model('Emotion_little_vgg.h5')
+#set local or full pathname for the haarcascades and vgg.h5 files
+face_classifier = cv2.CascadeClassifier(
+    '/Users/samlindaman/PycharmProjects/Emotion/haarcascade_frontalface_default.xml')
+classifier = load_model('/Users/samlindaman/PycharmProjects/Emotion/Emotion_little_vgg.h5')
 
-class_labels = ['Angry','Happy','Neutral','Sad','Surprise']
+class_labels = ['Angry', 'Happy', 'Neutral', 'Sad', 'Surprise']
+cap = cv2.VideoCapture(0)
 
-# def face_detector(img):
-#     # Convert image to grayscale
-#     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-#     faces = face_classifier.detectMultiScale(gray,1.3,5)
-#     if faces is ():
-#         return (0,0,0,0),np.zeros((48,48),np.uint8),img
-
-#     for (x,y,w,h) in faces:
-#         cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-#         roi_gray = gray[y:y+h,x:x+w]
-
-#     try:
-#         roi_gray = cv2.resize(roi_gray,(48,48),interpolation=cv2.INTER_AREA)
-#     except:
-#         return (x,w,y,h),np.zeros((48,48),np.uint8),img
-#     return (x,w,y,h),roi_gray,img
-
-
-cap = cv2.VideoCapture(1)
-
-
+# set variable for falling check
+arrHeights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+count = 0
+fallenText = "FALLEN"
+fallen = False
+#
 
 while True:
     # Grab a single frame of video
     ret, frame = cap.read()
     labels = []
-    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    faces = face_classifier.detectMultiScale(gray,1.3,5)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
 
-    for (x,y,w,h) in faces:
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h,x:x+w]
-        roi_gray = cv2.resize(roi_gray,(48,48),interpolation=cv2.INTER_AREA)
-    # rect,face,image = face_detector(frame)
+    for (x, y, w, h) in faces:
 
+        # Falling check
+        arrHeights.append(y)  # append array of y coordinates for each face
+        size = len(arrHeights)
+        
+        # loop through the last 10 x coordinates to check for downward trend
+        for s in range(size - 11, size - 1):  
+            if arrHeights[s] > arrHeights[s - 1]:
+                count = count + 1
+            else:
+                count = 0
+                fallen = False
+                # if user comes back into screen, the fallen message should disappear
+                
+            # make sure that the fall is large/fast enough and the user wan't just moving their head downward
+            if count >= 6 and arrHeights[s] - arrHeights[s - 5] >= 175: 
+                fallen = True
+                break
+        
+        # draw rectangle
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        roi_gray = gray[y:y + h, x:x + w]
+        roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
+        # rect,face,image = face_detector(frame)
 
-        if np.sum([roi_gray])!=0:
-            roi = roi_gray.astype('float')/255.0
+        if np.sum([roi_gray]) != 0:
+            roi = roi_gray.astype('float') / 255.0
             roi = img_to_array(roi)
-            roi = np.expand_dims(roi,axis=0)
+            roi = np.expand_dims(roi, axis=0)
 
-        # make a prediction on the ROI, then lookup the class
+            # make a prediction on the ROI, then lookup the class
 
             preds = classifier.predict(roi)[0]
-            label=class_labels[preds.argmax()]
-            label_position = (x,y)
-            cv2.putText(frame,label,label_position,cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
+            label = class_labels[preds.argmax()]
+            label_position = (x, y)
+            cv2.putText(frame, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
         else:
-            cv2.putText(frame,'No Face Found',(20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
-    cv2.imshow('Emotion Detector',frame)
+            cv2.putText(frame, 'No Face Found', (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+
+    if fallen:
+        cv2.putText(frame, fallenText, (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
+        
+    cv2.imshow('Emotion Detector', frame)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
