@@ -7,6 +7,9 @@ from imutils import face_utils
 imgSam = face_recognition.load_image_file('faces/Sam.png')
 imgSamEncoding = face_recognition.face_encodings(imgSam)[0]
 
+imgTrev = face_recognition.load_image_file('faces/Trev.png')
+imgTrevEncoding = face_recognition.face_encodings(imgTrev)[0]
+
 imgNabil = face_recognition.load_image_file('faces/Nabil.png')
 imgNabilEncoding = face_recognition.face_encodings(imgNabil)[0]
 
@@ -26,8 +29,8 @@ imgLee = face_recognition.load_image_file('faces/Lee.png')
 imgLeeEncoding = face_recognition.face_encodings(imgLee)[0]
 
 learnedFaceEncodings = [imgSamEncoding, imgNabilEncoding, imgSunghoRohEncoding, imgParkEncoding,
-                        imgAntonioEncoding, imgKimEncoding, imgLeeEncoding]
-learnedFaceNames = ['Sam', 'Nabil', 'Sungho Roh', 'Park', 'Antonio', 'Kim', 'Lee']
+                        imgAntonioEncoding, imgKimEncoding]
+learnedFaceNames = ['Sam', 'Trevor', 'Nabil', 'Sungho Roh', 'Park', 'Antonio', 'Kim']
 
 # End face initialization
 
@@ -69,7 +72,7 @@ while True:
             cv2.putText(img, 'Admin: ' + name, (left + 2, top + 23), font, 1, (255, 255, 255), 3)
         else:
             cv2.putText(img, name, (left + 2, top + 23), font, 1, (255, 255, 255), 3)
-            
+
         #cv2.rectangle(img, (left, top), (right, bottom), (255, 0, 0), 5)
         cv2.putText(img, exitText, (30, 30), font2, .75, (255, 255, 255), 1)
         cv2.imshow('camera', img)
@@ -80,5 +83,3 @@ while True:
 
 cam.release()
 cv2.destroyAllWindows()
-
-
