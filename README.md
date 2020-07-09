@@ -28,10 +28,10 @@ This web application project aims to conduct an intelligent health care system, 
 * ✅ Emotion Detection  
 * ✅ Facial recognition 
 * ✅ Face Detection     
+* ✅ Check for Fall -- can be improved 
 
 ### Todos
 
- - Analyzes whether someone has fallen 
  - Analyzes whether someone breaks into the prohibited area
  
  
