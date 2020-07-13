@@ -5,7 +5,6 @@ Created on Mon Jun 29 12:40:09 2020
 @author: nabil
 """
 #importing libraries
-
 import cv2
 import matplotlib.pyplot as plt
 
@@ -24,7 +23,7 @@ while True:
     #detect a facec inside the image using the classifier above
     #1.3 is for reducing the resolution of the image so that classifier can detect better. 
     #5 is sensitivity of the classifier 
-    faces = face_cascade.detectMultiScale(gray,1.3,3)
+    faces = face_cascade.detectMultiScale(gray,1.3,5)
     # cordinates for the square outside the face
 
         

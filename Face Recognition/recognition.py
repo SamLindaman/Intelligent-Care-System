@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 import face_recognition
+import matplotlib.pyplot as plt
 from PIL import Image,ImageDraw
-
+from PIL import Image
 font = cv2.FONT_HERSHEY_SIMPLEX
+
 
 imgNabil = face_recognition.load_image_file('Nabil.jpg')
 imgNabil_encoding = face_recognition.face_encodings(imgNabil)[0]
@@ -11,14 +13,15 @@ imgNabil_encoding = face_recognition.face_encodings(imgNabil)[0]
 imgElon = face_recognition.load_image_file('Elon.jpg')
 imgElon_encoding = face_recognition.face_encodings(imgElon)[0]
 
-
 known_face_encodings = [imgNabil_encoding,imgElon_encoding]
 known_face_names = ['Nabil','Elon']
 
 cam = cv2.VideoCapture(1)
 
 while True:
-    ret, img =cam.read()
+    ret, img = cam.read()
+
+
     # testImg = face_recognition.load_image_file(img)
     face_locations = face_recognition.face_locations(img)
     face_encodings = face_recognition.face_encodings(img,face_locations)
